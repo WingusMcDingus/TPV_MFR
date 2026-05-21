@@ -2,42 +2,38 @@ package model;
 
 public class LiniaTiquet {
     private int idTiquet;
-    public String data;
-    public String dniClient;
-    public double total_base;
-    public double total_iva;
-    public double total_final;
+    private int idArticle; 
+    private int quantitat;  
+    private double preuBase;
+    private int iva;
+    private double preuFinal;
 
-    public LiniaTiquet(int idTiquet, String data, String dniClient, double total_base, double total_iva, double total_final) {
+    // Constructor corregit
+    public LiniaTiquet(int idTiquet, int idArticle, int quantitat, double preuBase, int iva, double preuFinal) {
         this.idTiquet = idTiquet;
-        this.data = data;
-        this.dniClient = dniClient;
-        this.total_base = total_base;
-        this.total_iva = total_iva;
-        this.total_final = total_final;
+        this.idArticle = idArticle;
+        this.quantitat = quantitat;
+        this.preuBase = preuBase;
+        this.iva = iva;
+        this.preuFinal = preuFinal;
     }
 
-    public int getIdTiquet() {
-        return idTiquet;
+    public int getIdTiquet() { 
+        return idTiquet; 
     }
-
-    public String getData() {
-        return data;
+    public int getIdArticle() { 
+        return idArticle; 
     }
-
-    public String getDniClient() {
-        return dniClient;
+    public int getQuantitat() { 
+        return quantitat; 
     }
-
-    public double getTotalBase() {
-        return total_base;
+    public double getPreuBase() { 
+        return preuBase; 
     }
-
-    public double getTotalIva() {
-        return total_iva;
+    public int getIva() { 
+        return iva; 
     }
-
-    public double getTotalFinal() {
-        return total_final;
+    public double getPreuFinal() { 
+        return preuFinal; 
     }
 }

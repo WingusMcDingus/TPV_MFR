@@ -10,6 +10,7 @@ public class Tiquet {
     private double total_final;
     private ArrayList<LiniaTiquet> linies;
 
+    // Constructor 1: Per a nous tiquets (comença a 0)
     public Tiquet(int id, String data, String dni_client) {
         this.id = id;
         this.data = data;
@@ -20,39 +21,43 @@ public class Tiquet {
         this.linies = new ArrayList<>();
     }
 
-    public int getId() {
-        return id;
+    // Constructor 2: Recomanat per quan llegim dades ja guardades de la BD
+    public Tiquet(int id, String data, String dni_client, double total_base, double total_iva, double total_final) {
+        this.id = id;
+        this.data = data;
+        this.dni_client = dni_client;
+        this.total_base = total_base;
+        this.total_iva = total_iva;
+        this.total_final = total_final;
+        this.linies = new ArrayList<>();
     }
 
-    public String getData() {
-        return data;
+    public int getId() { 
+        return id; 
     }
-
-    public String getDniClient() {
-        return dni_client;
+    public String getData() { 
+        return data; 
     }
-
-    public double getTotalBase() {
-        return total_base;
+    public String getDniClient() { 
+        return dni_client; 
     }
-
-    public double getTotalIva() {
-        return total_iva;
+    public double getTotalBase() { 
+        return total_base; 
     }
-
-    public double getTotalFinal() {
-        return total_final;
+    public double getTotalIva() { 
+        return total_iva; 
     }
-
-    public ArrayList<LiniaTiquet> getLinies() {
-        return linies;
+    public double getTotalFinal() { 
+        return total_final; 
+    }
+    public ArrayList<LiniaTiquet> getLinies() { 
+        return linies; 
     }
     
     public void afegirLinia(LiniaTiquet linia) {
         linies.add(linia);
-        total_base += linia.getTotalBase();
-        total_iva += linia.getTotalIva(); 
-        total_final += linia.getTotalFinal(); 
+        this.total_base += linia.getPreuBase();
+        this.total_iva += (linia.getPreuFinal() - linia.getPreuBase());
+        this.total_final += linia.getPreuFinal(); 
     }
-    
 }
