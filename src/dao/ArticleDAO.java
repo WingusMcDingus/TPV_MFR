@@ -9,12 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class ArticleDAO {
-
-    // ==========================================
-    // INSERT
-    // ==========================================
     public boolean inserirArticle(Article article) {
-        // Hem afegit l'id, id_familia i els 4 camps de talles
         String sql = "INSERT INTO articles (id, nom, id_familia, preu_base, iva, stock, talla_coll, amplada_pit, talla_cintura, llargada_camal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
         try (Connection conn = ConnexioBD.connectar();
@@ -23,7 +18,6 @@ public class ArticleDAO {
             ps.setInt(1, article.getId());
             ps.setString(2, article.getNom());
         
-            // Traduïm la familia a id_familia (1: Camisa, 2: Pantaló)
             if (article.getFamilia().equalsIgnoreCase("camisa") || article instanceof Camisa) {
                 ps.setInt(3, 1);
             } else {
@@ -34,7 +28,6 @@ public class ArticleDAO {
             ps.setInt(5, article.getIva());
             ps.setInt(6, article.getStock());
         
-            // Lògica segons si és Camisa o Pantaló per establir les talles o valors NULL
             if (article instanceof Camisa) {
                 Camisa c = (Camisa) article;
                 ps.setInt(7, c.getTallaColl());
@@ -59,9 +52,6 @@ public class ArticleDAO {
         return false;
     }
 
-    // ==========================================
-    // SELECT ALL
-    // ==========================================
     public ArrayList<Article> obtenirArticles() {
         ArrayList<Article> articles = new ArrayList<>();
         String sql = "SELECT * FROM articles";
@@ -73,12 +63,11 @@ public class ArticleDAO {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String nom = rs.getString("nom");
-                int idFamilia = rs.getInt("id_familia"); // Llegim la FK en lloc de l'ENUM
+                int idFamilia = rs.getInt("id_familia");
                 double preuBase = rs.getDouble("preu_base");
                 int iva = rs.getInt("iva");
                 int stock = rs.getInt("stock");
                 
-                // Instanciem Camisa o Pantaló segons el número de la família (1 o 2)
                 if (idFamilia == 1) { // És una camisa
                     int tallaColl = rs.getInt("talla_coll");
                     int ampladaPit = rs.getInt("amplada_pit");
@@ -101,30 +90,21 @@ public class ArticleDAO {
         return articles;
     }
 
-    // ==========================================
-    // UPDATE
-    // ==========================================
     public boolean actualitzarArticle(Article article) {
-        // Incloem l'id_familia i les columnes de les talles a la modificació
         String sql = "UPDATE articles SET nom = ?, id_familia = ?, preu_base = ?, iva = ?, stock = ?, talla_coll = ?, amplada_pit = ?, talla_cintura = ?, llargada_camal = ? WHERE id = ?";
         
         try (Connection conn = ConnexioBD.connectar();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-             
+             PreparedStatement ps = conn.prepareStatement(sql)) {        
             ps.setString(1, article.getNom());
-            
-            // Traduïm la família al número id_familia
             if (article instanceof Camisa) {
                 ps.setInt(2, 1);
             } else {
                 ps.setInt(2, 2);
             }
-            
             ps.setDouble(3, article.getPreu_base());
             ps.setInt(4, article.getIva());
             ps.setInt(5, article.getStock());
-            
-            // Comprovem quin tipus d'article és per actualitzar les talles pertinents
+
             if (article instanceof Camisa) {
                 Camisa c = (Camisa) article;
                 ps.setInt(6, c.getTallaColl());
@@ -139,7 +119,6 @@ public class ArticleDAO {
                 ps.setInt(9, p.getLlargada()); 
             }
             
-            // Condició del WHERE (id = ?)
             ps.setInt(10, article.getId());
             
             int filesAfectades = ps.executeUpdate();
@@ -152,9 +131,6 @@ public class ArticleDAO {
         return false;
     }
 
-    // ==========================================
-    // DELETE
-    // ==========================================
     public boolean eliminarArticle(int id) {
         String sql = "DELETE FROM articles WHERE id = ?";
         
