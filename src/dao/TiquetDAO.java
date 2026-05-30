@@ -37,8 +37,7 @@ public class TiquetDAO {
     }
 
     public boolean inserirLinia(LiniaTiquet linia) {
-        String sql = "INSERT INTO linies_factura (id_tiquet, id_article, quantitat, preu_base, iva, preu_final) VALUES (?, ?, ?, ?, ?, ?)";
-        
+        String sql = "INSERT INTO linies_tiquet (id_tiquet, id_article, quantitat, preu_base, iva, preu_final) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = ConnexioBD.connectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -46,14 +45,13 @@ public class TiquetDAO {
             ps.setInt(2, linia.getIdArticle());
             ps.setInt(3, linia.getQuantitat());
             ps.setDouble(4, linia.getPreuBase());
-            ps.setInt(5, linia.getIva());
+            ps.setDouble(5, linia.getIva());
             ps.setDouble(6, linia.getPreuFinal());
             
             int filesAfectades = ps.executeUpdate();
             return filesAfectades > 0;
-            
         } catch (SQLException e) {
-            System.out.println("Error inserint linia de factura:");
+            System.out.println("Error inserint linia de tiquet");
             e.printStackTrace();
         }
         return false;

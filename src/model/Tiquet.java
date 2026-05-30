@@ -50,6 +50,15 @@ public class Tiquet {
     public double getTotalFinal() { 
         return total_final; 
     }
+    public void setTotalBase(double totalBase) { 
+        this.total_base = totalBase; 
+    }
+    public void setTotalIva(double totalIva) { 
+        this.total_iva = totalIva; 
+    }
+    public void setTotalFinal(double totalFinal) { 
+        this.total_final = totalFinal; 
+    }
     public ArrayList<LiniaTiquet> getLinies() { 
         return linies; 
     }

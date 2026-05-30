@@ -35,8 +35,9 @@ public class Pantalo extends Article {
         return preu_base * 0.30 + llargada * 0.2;
     }
     // toString
-    @Override
     public String toString() {
-        return "Pantalo{" + ", tallaCintura=" + tallaCintura + ", llargada=" + llargada + '}';
+        return "ID: " + id + " | Nom: " + nom + " | Preu: " + preu_base + 
+            "€ | IVA: " + iva + "% | Stock: " + stock +
+            " | [PANTALÓ -> Cintura: " + tallaCintura + ", Llargada: " + llargada + "]";
     }
 }

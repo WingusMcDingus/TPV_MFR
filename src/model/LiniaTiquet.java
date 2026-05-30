@@ -36,4 +36,7 @@ public class LiniaTiquet {
     public double getPreuFinal() { 
         return preuFinal; 
     }
+    public void setIdTiquet(int idTiquet) { 
+        this.idTiquet = idTiquet; 
+    }
 }

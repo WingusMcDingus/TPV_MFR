@@ -38,8 +38,8 @@ public class Camisa extends Article {
     // toString
     @Override
     public String toString() {
-        return "Camisa{" + ", tallaColl=" + tallaColl + ", ampladaPit=" + ampladaPit + '}';
+        return "ID: " + id + " | Nom: " + nom + " | Preu: " + preu_base + 
+            "€ | IVA: " + iva + "% | Stock: " + stock +
+            " | [CAMISA -> Coll: " + tallaColl + ", Pit: " + ampladaPit + "]";
     }
-
-
 }
