@@ -66,7 +66,8 @@ public class CRUDarticle {
         if (llista.isEmpty()) {
             System.out.println("El magatzem està buit.");
         } else {
-            for (Article a : llista) {
+            for (int i = 0; i < llista.size(); i++) {
+                Article a = llista.get(i);
                 System.out.print("ID: " + a.getId() + " | Nom: " + a.getNom() + " | Preu: " + a.getPreu_base() + "€ | Stock: " + a.getStock());
                 
                 if (a instanceof Camisa) {

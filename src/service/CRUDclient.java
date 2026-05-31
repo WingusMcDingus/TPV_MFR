@@ -23,7 +23,7 @@ public class CRUDclient {
             System.out.println("2. Afegir un nou client");
             System.out.println("3. Modificar un client existent");
             System.out.println("4. Eliminar un client");
-            System.out.println("0. Tornar al menú principal");
+            System.out.println("5. Tornar al menú principal");
             System.out.print("Tria una opció: ");
             
             try {
@@ -63,7 +63,8 @@ public class CRUDclient {
         if (llista.isEmpty()) {
             System.out.println("No hi ha cap client registrat a la base de dades.");
         } else {
-            for (Client c : llista) {
+            for (int i = 0; i < llista.size(); i++) {
+                Client c = llista.get(i);
                 System.out.println("DNI: " + c.getDni() + " | Nom: " + c.getNom() + 
                                    " | Email: " + c.getEmail() + " | Telèfon: " + c.getTelefon());
             }

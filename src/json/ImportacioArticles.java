@@ -2,7 +2,6 @@ package json;
 
 import dao.ArticleDAO;
 import model.*;
-import util.GestorJSON;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -19,7 +18,6 @@ public class ImportacioArticles {
     }
 
     public void executar(String rutaFitxer) {
-        // 1. Llegir el JSON
         ArrayList<Article> articles = gestorJSON.llegirArticles(rutaFitxer);
 
         if (articles.isEmpty()) {
@@ -27,21 +25,20 @@ public class ImportacioArticles {
             return;
         }
 
-        // 2. Comptar i mostrar
         int numCamises = 0;
         int numPantalons = 0;
-        for (Article a : articles) {
+        for (int i = 0; i < articles.size(); i++) {
+            Article a = articles.get(i);
             if (a instanceof Camisa) numCamises++;
             else if (a instanceof Pantalo) numPantalons++;
         }
 
         System.out.println("\n=== IMPORTACIÓ D'ARTICLES ===");
         System.out.println("Articles trobats al fitxer:");
-        System.out.println("  Camises:  " + numCamises);
+        System.out.println("  Camises:   " + numCamises);
         System.out.println("  Pantalons: " + numPantalons);
-        System.out.println("  TOTAL:    " + articles.size());
+        System.out.println("  TOTAL:     " + articles.size());
 
-        // 3. Preguntar confirmació
         System.out.print("\nVols carregar aquests articles a la base de dades? (s/n): ");
         String resposta = scanner.nextLine().trim().toLowerCase();
 
@@ -50,7 +47,6 @@ public class ImportacioArticles {
             return;
         }
 
-        // 4. Inserir o actualitzar
         int afegits = 0;
         int actualitzats = 0;
         ArrayList<Article> articlesExistents = articleDAO.obtenirArticles();
@@ -74,7 +70,6 @@ public class ImportacioArticles {
             }
         }
 
-        // 5. Mostrar resultat
         System.out.println("\nImportació finalitzada:");
         System.out.println("  Articles afegits:      " + afegits);
         System.out.println("  Articles actualitzats: " + actualitzats);

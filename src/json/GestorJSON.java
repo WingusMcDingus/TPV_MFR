@@ -4,10 +4,11 @@ import model.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
+import java.io.FileInputStream;
 import java.util.ArrayList;
-//no puedo solucionar esta mierda al estar conectado remoto y no ser el host, tendras que mirar como 
-//hacer que detecte el puto json simple o ponerlo tu srry :)
+
 public class GestorJSON {
 
     public ArrayList<Article> llegirArticles(String rutaFitxer) {
@@ -15,10 +16,11 @@ public class GestorJSON {
         JSONParser parser = new JSONParser();
 
         try {
-            JSONArray jsonArray = (JSONArray) parser.parse(new FileReader(rutaFitxer));
+            JSONArray jsonArray = (JSONArray) parser.parse(new InputStreamReader(
+                new FileInputStream(rutaFitxer), "UTF-8"));
 
-            for (Object o : jsonArray) {
-                JSONObject obj = (JSONObject) o;
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject obj = (JSONObject) jsonArray.get(i);
 
                 int id = ((Number) obj.get("id")).intValue();
                 String nom = (String) obj.get("nom");
@@ -44,5 +46,26 @@ public class GestorJSON {
         }
 
         return articles;
+    }
+
+    public void escriureRecompra(String rutaFitxer, ArrayList<Article> articles, ArrayList<Integer> quantitats) {
+        JSONArray jsonArray = new JSONArray();
+
+        for (int i = 0; i < articles.size(); i++) {
+            JSONObject obj = new JSONObject();
+            obj.put("id", articles.get(i).getId());
+            obj.put("nom", articles.get(i).getNom());
+            obj.put("quantitat", quantitats.get(i));
+            jsonArray.add(obj);
+        }
+
+        try {
+            FileWriter fw = new FileWriter(rutaFitxer);
+            fw.write(jsonArray.toJSONString());
+            fw.close();
+            System.out.println("Fitxer de recompra generat correctament.");
+        } catch (Exception e) {
+            System.out.println("Error escrivint el fitxer JSON: " + e.getMessage());
+        }
     }
 }

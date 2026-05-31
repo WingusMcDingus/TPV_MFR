@@ -90,21 +90,70 @@ public class ArticleDAO {
         return articles;
     }
 
+    public Article obtenirArticlePerId(int id) {
+        String sql = "SELECT * FROM articles WHERE id = ?";
+        try (Connection conn = ConnexioBD.connectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int idFamilia = rs.getInt("id_familia");
+                    if (idFamilia == 1) { // Camisa
+                        return new Camisa(
+                            rs.getInt("id"), rs.getString("nom"), "camisa", 
+                            rs.getDouble("preu_base"), rs.getInt("iva"), 
+                            rs.getInt("stock"), rs.getInt("talla_coll"), rs.getInt("amplada_pit")
+                        );
+                    } else if (idFamilia == 2) { // Pantaló
+                        return new Pantalo(
+                            rs.getInt("id"), rs.getString("nom"), "pantaló", 
+                            rs.getDouble("preu_base"), rs.getInt("iva"), 
+                            rs.getInt("stock"), rs.getInt("talla_cintura"), rs.getInt("llargada_camal")
+                        );
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error obtenint article per ID:");
+            e.printStackTrace();
+        }
+        return null; // Retorna null si no troba l'article
+    }
+
+    public boolean actualitzarStock(int id, int nouStock) {
+        String sql = "UPDATE articles SET stock = ? WHERE id = ?";
+        try (Connection conn = ConnexioBD.connectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+             
+            ps.setInt(1, nouStock);
+            ps.setInt(2, id);
+            return ps.executeUpdate() > 0;
+            
+        } catch (SQLException e) {
+            System.out.println("Error actualitzant stock:");
+            e.printStackTrace();
+        }
+        return false;
+    }
     public boolean actualitzarArticle(Article article) {
         String sql = "UPDATE articles SET nom = ?, id_familia = ?, preu_base = ?, iva = ?, stock = ?, talla_coll = ?, amplada_pit = ?, talla_cintura = ?, llargada_camal = ? WHERE id = ?";
         
         try (Connection conn = ConnexioBD.connectar();
-             PreparedStatement ps = conn.prepareStatement(sql)) {        
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+             
             ps.setString(1, article.getNom());
-            if (article instanceof Camisa) {
+        
+            if (article.getFamilia().equalsIgnoreCase("camisa") || article instanceof Camisa) {
                 ps.setInt(2, 1);
             } else {
                 ps.setInt(2, 2);
             }
+            
             ps.setDouble(3, article.getPreu_base());
             ps.setInt(4, article.getIva());
             ps.setInt(5, article.getStock());
-
+        
             if (article instanceof Camisa) {
                 Camisa c = (Camisa) article;
                 ps.setInt(6, c.getTallaColl());
@@ -116,21 +165,18 @@ public class ArticleDAO {
                 ps.setNull(6, java.sql.Types.INTEGER);
                 ps.setNull(7, java.sql.Types.INTEGER);
                 ps.setInt(8, p.getTallaCintura());
-                ps.setInt(9, p.getLlargada()); 
+                ps.setInt(9, p.getLlargada());
             }
             
             ps.setInt(10, article.getId());
+            return ps.executeUpdate() > 0;
             
-            int filesAfectades = ps.executeUpdate();
-            return filesAfectades > 0;
-
         } catch (SQLException e) {
             System.out.println("Error actualitzant article:");
             e.printStackTrace();
         }
         return false;
     }
-
     public boolean eliminarArticle(int id) {
         String sql = "DELETE FROM articles WHERE id = ?";
         
